@@ -17,22 +17,16 @@
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>	<!-- used starter configuration -->
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
 		</dependency>
-
-<!--		<dependency>-->
-<!--			<groupId>org.junit.platform</groupId>-->
-<!--			<artifactId>junit‐platform‐runner</artifactId>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
 
 	</dependencies>
 

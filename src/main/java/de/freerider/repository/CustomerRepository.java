@@ -1,15 +1,25 @@
 package de.freerider.repository;
 
-import de.freerider.model.Customer;
-import org.springframework.stereotype.Component;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Optional;
 
+import org.springframework.stereotype.Component;
+
+import de.freerider.model.Customer;
+
+
+/**
+ * Customer-Repository implementation of the CrudRepository<Customer, String>
+ * interface using an internal HashMap<String, Customer>.
+ *
+ * @Component with @Qualifier to differentiate from other components of the
+ * CrudRepository<Customer, String> interface.
+ *
+ */
 
 @Component
-class CustomerRepository implements CrudRepository<Customer, String> {
+public class CustomerRepository implements CrudRepository<Customer, String> {
 	//
 	private final IDGenerator idGen = new IDGenerator( "C", IDGenerator.IDTYPE.NUM, 6 );
 	private final HashMap<String, Customer> customers = new HashMap<String, Customer>();
