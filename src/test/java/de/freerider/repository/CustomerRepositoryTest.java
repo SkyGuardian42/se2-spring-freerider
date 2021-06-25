@@ -43,6 +43,15 @@ class CustomerRepositoryTest {
 		assertEquals( customerRepository.count(), 0 );
 	}
 
+	//	Konstruktor Test
+
+	@Test
+	void testCreateNewRepository() {
+		assertEquals(0, customerRepository.count());
+	}
+
+	// Save Test
+
 	@Test
 	void testSaveCustomers() {
 		customerRepository.save(mats);
@@ -71,8 +80,10 @@ class CustomerRepositoryTest {
 
 	@Test
 	void testSaveNull() {
-		customerRepository.save(null);
-		assertEquals(0, customerRepository.count());
+		assertThrows( IllegalArgumentException.class, () -> {
+			customerRepository.save(null);
+			fail( "IllegalArgumentException not thrown" );
+		});
 	}
 
 	@Test
@@ -126,9 +137,10 @@ class CustomerRepositoryTest {
 
 	@Test
 	void testSaveAllNull() {
-		customerRepository.saveAll(null);
-
-		assertEquals(0, customerRepository.count());
+		assertThrows( IllegalArgumentException.class, () -> {
+			customerRepository.saveAll(null);
+			fail( "IllegalArgumentException not thrown" );
+		});
 	}
 
 	// FIND BY ID TESTS
@@ -146,7 +158,10 @@ class CustomerRepositoryTest {
 
 	@Test
 	void testFindNull() {
-		assertFalse(customerRepository.findById(null).isPresent());
+		assertThrows( IllegalArgumentException.class, () -> {
+			customerRepository.findById(null);
+			fail( "IllegalArgumentException not thrown" );
+		});
 	}
 
 	// FIND ALL TEST
@@ -160,9 +175,192 @@ class CustomerRepositoryTest {
 		list.add(savedMats);
 		list.add(savedThomas);
 
-//		assertEquals(2, Iterator.l customerRepository.findAllById(list));
+		Iterator<Customer> iter = customerRepository.findAll().iterator();
 
+		int i = 0;
+		while(iter.hasNext()){
+			iter.next();
+			i++;
+		}
+
+		assertEquals(2, i);
 	}
+
+	@Test
+	void testFindAllEmpty() {
+		Iterator<Customer> iter = customerRepository.findAll().iterator();
+
+		int i = 0;
+		while(iter.hasNext()){
+			iter.next();
+			i++;
+		}
+
+		assertEquals(0, i);
+	}
+
+	// Test find all by od
+	@Test
+	void testFindAllById() {
+		Customer savedMats = customerRepository.save(mats);
+		Customer savedThomas = customerRepository.save(thomas);
+
+		LinkedList<String> list = new LinkedList();
+		list.add(savedMats.getId());
+		list.add(savedThomas.getId());
+
+		Iterator<Customer> iter = customerRepository.findAllById(list).iterator();
+
+		int i = 0;
+		while(iter.hasNext()){
+			iter.next();
+			i++;
+		}
+
+		assertEquals(2, i);
+	}
+
+	@Test
+	void testFindAllByIdInEmpty() {
+		Iterator<Customer> iter = customerRepository.findAllById(new LinkedList<String>()).iterator();
+
+		int i = 0;
+		while(iter.hasNext()){
+			iter.next();
+			i++;
+		}
+
+		assertEquals(0, i);
+	}
+
+	// COUNT TEST
+
+	@Test
+	void testCountOne() {
+		customerRepository.save(mats);
+		assertEquals(1, customerRepository.count());
+	}
+
+	@Test
+	void testCountMultiple() {
+		customerRepository.save(mats);
+		customerRepository.save(thomas);
+		assertEquals(2, customerRepository.count());
+	}
+
+	@Test
+	void testCountZero() {
+		assertEquals(0, customerRepository.count());
+	}
+
+	// Delete Test
+
+	@Test
+	void testDeleteOne() {
+		Customer saved = customerRepository.save(mats);
+		assertEquals(1, customerRepository.count());
+		customerRepository.delete(mats);
+		assertEquals(0, customerRepository.count());
+	}
+
+	@Test
+	void testDeleteNull() {
+		assertThrows( IllegalArgumentException.class, () -> {
+			customerRepository.delete(null);
+			fail( "IllegalArgumentException not thrown" );
+		});
+	}
+
+	@Test
+	void testDeleteByIdOne() {
+		Customer saved = customerRepository.save(mats);
+		assertEquals(1, customerRepository.count());
+		customerRepository.deleteById(mats.getId());
+		assertEquals(0, customerRepository.count());
+	}
+
+	@Test
+	void testDeleteByIdNull() {
+		assertThrows( IllegalArgumentException.class, () -> {
+			customerRepository.deleteById(null);
+			fail( "IllegalArgumentException not thrown" );
+		});
+	}
+
+	@Test
+	void testDeleteAll() {
+		customerRepository.save(mats);
+		customerRepository.save(thomas);
+
+		customerRepository.deleteAll();
+		assertEquals(0, customerRepository.count());
+	}
+
+	@Test
+	void testDeleteAllIterableOne() {
+		Customer savedMats = customerRepository.save(mats);
+
+		LinkedList list = new LinkedList<Customer>();
+		list.add(savedMats);
+
+		customerRepository.deleteAll(list);
+		assertEquals(0, customerRepository.count());
+	}
+
+	@Test
+	void testDeleteAllIterableMultiple() {
+		Customer savedMats = customerRepository.save(mats);
+		Customer savedThomas = customerRepository.save(thomas);
+
+		LinkedList list = new LinkedList<Customer>();
+		list.add(savedMats);
+		list.add(savedThomas);
+
+		customerRepository.deleteAll(list);
+		assertEquals(0, customerRepository.count());
+	}
+
+
+	@Test
+	void testExistsById() {
+		Customer savedMats = customerRepository.save(mats);
+		assertTrue(customerRepository.existsById(savedMats.getId()));
+	}
+
+	@Test
+	void testExistsByIdNull() {
+		assertThrows( IllegalArgumentException.class, () -> {
+			assertFalse(customerRepository.existsById(null));
+			fail( "IllegalArgumentException not thrown" );
+		});
+	}
+
+	@Test
+	void testDeleteOneByIdIterable() {
+		Customer savedMats = customerRepository.save(mats);
+
+		LinkedList list = new LinkedList<String>();
+		list.add(savedMats.getId());
+
+		customerRepository.deleteAllById(list);
+		assertEquals(0, customerRepository.count());
+	}
+
+	@Test
+	void testDeleteMultipleByIdIterable() {
+		Customer savedMats = customerRepository.save(mats);
+		Customer savedThomas = customerRepository.save(thomas);
+
+		LinkedList list = new LinkedList<String>();
+		list.add(savedMats.getId());
+		list.add(savedThomas.getId());
+
+		customerRepository.deleteAllById(list);
+		assertEquals(0, customerRepository.count());
+	}
+
+
+
 
 //	@Test
 //	void testFive() {

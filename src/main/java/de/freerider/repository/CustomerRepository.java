@@ -28,7 +28,7 @@ public class CustomerRepository implements CrudRepository<Customer, String> {
 	public <S extends Customer> S save(S entity) {
 
 		if(entity == null) {
-			return null;
+			throw new IllegalArgumentException("ID can't be null");
 		}
 
 		// if customer does not have an ID
@@ -40,14 +40,24 @@ public class CustomerRepository implements CrudRepository<Customer, String> {
 			}
 			entity.setId(idGen.nextId());
 		}
+
+//		Customer prevCustomer = customers.get(entity.getId())
+
+		Customer prevCustomer = customers.get(entity.getId());
+
 		customers.put(entity.getId(), entity);
+
+		if(prevCustomer != null) {
+			return (S) prevCustomer;
+		}
+
 		return entity;
 	}
 
 	@Override
 	public <S extends Customer> Iterable<S> saveAll(Iterable<S> entities) {
 		if(entities == null) {
-			return null;
+			throw new IllegalArgumentException("list of entities can't be null");
 		}
 
 		entities.forEach(this::save);
@@ -56,6 +66,10 @@ public class CustomerRepository implements CrudRepository<Customer, String> {
 
 	@Override
 	public Optional<Customer> findById(String s) {
+		if(s == null) {
+			throw new IllegalArgumentException();
+		}
+
 		Customer customer = customers.get(s);
 		if(customer == null) {
 			return Optional.empty();
@@ -66,6 +80,10 @@ public class CustomerRepository implements CrudRepository<Customer, String> {
 
 	@Override
 	public boolean existsById(String s) {
+		if(s == null) {
+			throw new IllegalArgumentException();
+		}
+
 		return customers.get(s) != null;
 	}
 
@@ -76,7 +94,13 @@ public class CustomerRepository implements CrudRepository<Customer, String> {
 
 	@Override
 	public Iterable<Customer> findAllById(Iterable<String> strings) {
-		LinkedList<Customer> filteredCustomers = new LinkedList<Customer>();
+		if(strings == null) {
+			throw new IllegalArgumentException();
+		}
+
+		LinkedList<Customer> filteredCustomers = new LinkedList();
+
+
 
 		strings.forEach(string -> {
 			Customer foundCustomer = customers.get(string);
@@ -95,6 +119,10 @@ public class CustomerRepository implements CrudRepository<Customer, String> {
 
 	@Override
 	public void deleteById(String s) {
+		if(s == null) {
+			throw new IllegalArgumentException();
+		}
+
 		customers.remove(s);
 	}
 
@@ -103,16 +131,30 @@ public class CustomerRepository implements CrudRepository<Customer, String> {
 		if(entity == null) {
 			throw new IllegalArgumentException();
 		}
+
+		if(entity.getId() == null) {
+			throw new IllegalArgumentException("ID of entity can't be null");
+		}
+
 		customers.remove(entity.getId());
 	}
 
 	@Override
 	public void deleteAllById(Iterable<? extends String> strings) {
+		if(strings == null) {
+			throw new IllegalArgumentException();
+		}
+
+
 		strings.forEach(this::deleteById);
 	}
 
 	@Override
 	public void deleteAll(Iterable<? extends Customer> entities) {
+		if(entities == null) {
+			throw new IllegalArgumentException();
+		}
+
 		entities.forEach(this::delete);
 	}
 
