@@ -26,6 +26,11 @@ public class CustomerRepository implements CrudRepository<Customer, String> {
 
 	@Override
 	public <S extends Customer> S save(S entity) {
+
+		if(entity == null) {
+			return null;
+		}
+
 		// if customer does not have an ID
 		if(entity.getId() == null || entity.getId().length() == 0) {
 			String newId = idGen.nextId();
@@ -41,6 +46,10 @@ public class CustomerRepository implements CrudRepository<Customer, String> {
 
 	@Override
 	public <S extends Customer> Iterable<S> saveAll(Iterable<S> entities) {
+		if(entities == null) {
+			return null;
+		}
+
 		entities.forEach(this::save);
 		return entities;
 	}

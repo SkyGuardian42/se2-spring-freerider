@@ -1,4 +1,4 @@
-package de.freerider.customermanager;
+package de.freerider;
 
 import de.freerider.model.Customer;
 import de.freerider.repository.CrudRepository;
@@ -7,8 +7,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import static java.rmi.server.LogStream.log;
 
 @SpringBootApplication
 public class Application {
