@@ -1,6 +1,6 @@
 package de.freerider.model;
 
-import de.freerider.model.Customer;
+import de.freerider.datamodel.Customer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

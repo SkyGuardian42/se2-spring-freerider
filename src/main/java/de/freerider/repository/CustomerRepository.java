@@ -4,9 +4,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import de.freerider.model.Customer;
+import de.freerider.datamodel.Customer;
 
 
 /**
@@ -19,6 +20,7 @@ import de.freerider.model.Customer;
  */
 
 @Component
+@Qualifier("CustomerRepository_Impl")
 public class CustomerRepository implements CrudRepository<Customer, String> {
 	//
 	private final IDGenerator idGen = new IDGenerator( "C", IDGenerator.IDTYPE.NUM, 6 );
