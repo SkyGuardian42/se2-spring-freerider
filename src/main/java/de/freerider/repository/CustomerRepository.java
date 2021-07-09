@@ -41,8 +41,6 @@ public class CustomerRepository implements CrudRepository<Customer, String> {
 			entity.setId(idGen.nextId());
 		}
 
-//		Customer prevCustomer = customers.get(entity.getId())
-
 		Customer prevCustomer = customers.get(entity.getId());
 
 		customers.put(entity.getId(), entity);
